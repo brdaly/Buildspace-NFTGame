@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
+import SelectCharacter from './Components/SelectCharacter';
 import twitterLogo from './assets/twitter-logo.svg';
 
 // Constants
@@ -11,6 +12,12 @@ const App = () => {
    * Just a state variable we use to store our user's public wallet. Don't forget to import useState.
    */
   const [currentAccount, setCurrentAccount] = useState(null);
+
+  /*
+ * Right under current account, setup this new state property
+ */
+  const [characterNFT, setCharacterNFT] = useState(null); 
+  
   /*
    * Start by creating a new action that we will run on component load
    */
@@ -45,7 +52,36 @@ const App = () => {
     } catch (error) {
       console.log(error);
     }
-  };  
+  };
+  // Render Methods
+  const renderContent = () => {
+    /*
+    * Scenario #1
+    */
+    if (!currentAccount) {
+      return (
+        <div className="connect-wallet-container">
+          <img
+            src="https://64.media.tumblr.com/tumblr_mbia5vdmRd1r1mkubo1_500.gifv"
+            alt="Monty Python Gif"
+          />
+          <button
+            className="cta-button connect-wallet-button"
+            onClick={connectWalletAction}
+          >
+            Connect Wallet To Get Started
+          </button>
+        </div>
+      );
+      /*
+      * Scenario #2
+      */
+    } else if (currentAccount && !characterNFT) {
+      return <SelectCharacter setCharacterNFT={setCharacterNFT} />;
+    }
+  };
+
+    
   /*
    * Implement your connectWallet method here
    */
@@ -82,28 +118,17 @@ const App = () => {
     checkIfWalletIsConnected();
   }, []);
 
+
   return (
     <div className="App">
       <div className="container">
         <div className="header-container">
-          <p className="header gradient-text"> 🐢 Teenage Mutant Ninja Turtles 🐢 </p>
+          <p className="header gradient-text">🐢 Teenage Mutant Ninja Turtles 🐢</p>
           <p className="sub-text">Team up to defeat Shredder!</p>
-          <div className="connect-wallet-container">
-            <img
-              src="https://64.media.tumblr.com/6ce0efd032c11117ccefcccee48c8f31/d2f6d1cd1704cba9-91/s500x750/a4e7fb2d40a021ca31ebb5c054c8e2d9385dec26.gifv"
-              alt="Teenage Mutant Ninja Turtles Gif"
-            />
-            {/*
-             * Button that we will use to trigger wallet connect
-             * Don't forget to add the onClick event to call your method!
-             */}
-            <button
-              className="cta-button connect-wallet-button"
-              onClick={connectWalletAction}
-            >
-              Connect Wallet To Get Started
-            </button>
-          </div>
+          {/* This is where our button and image code used to be!
+          *	Remember we moved it into the render method.
+          */}
+          {renderContent()}
         </div>
         <div className="footer-container">
           <img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} />
@@ -112,11 +137,10 @@ const App = () => {
             href={TWITTER_LINK}
             target="_blank"
             rel="noreferrer"
-          >{`built by @${TWITTER_HANDLE}`}</a>
+          >{`built with @${TWITTER_HANDLE}`}</a>
         </div>
       </div>
     </div>
   );
 };
-
 export default App;
