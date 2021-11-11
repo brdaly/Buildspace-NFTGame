@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import SelectCharacter from './Components/SelectCharacter';
+import { CONTRACT_ADDRESS, transformCharacterData } from './constants';
+import myEpicGame from './utils/MyEpicGame.json';
+import { ethers } from 'ethers';
+
 import twitterLogo from './assets/twitter-logo.svg';
 
 // Constants
@@ -53,6 +57,42 @@ const App = () => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    /*
+    * The function we will call that interacts with out smart contract
+    */
+    const fetchNFTMetadata = async () => {
+      console.log('Checking for Character NFT on address:', currentAccount);
+
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const gameContract = new ethers.Contract(
+        CONTRACT_ADDRESS,
+        myEpicGame.abi,
+        signer
+      );
+
+      const txn = await gameContract.checkIfUserHasNFT();
+      if (txn.name) {
+        console.log('User has character NFT');
+        setCharacterNFT(transformCharacterData(txn));
+      } else {
+        console.log('No character NFT found');
+      }
+    };
+
+    /*
+    * We only want to run this, if we have a connected wallet
+    */
+    if (currentAccount) {
+      console.log('CurrentAccount:', currentAccount);
+      fetchNFTMetadata();
+    }
+  }, [currentAccount]);
+
+
+
   // Render Methods
   const renderContent = () => {
     /*
@@ -62,8 +102,8 @@ const App = () => {
       return (
         <div className="connect-wallet-container">
           <img
-            src="https://64.media.tumblr.com/tumblr_mbia5vdmRd1r1mkubo1_500.gifv"
-            alt="Monty Python Gif"
+            src="https://64.media.tumblr.com/6ce0efd032c11117ccefcccee48c8f31/d2f6d1cd1704cba9-91/s500x750/a4e7fb2d40a021ca31ebb5c054c8e2d9385dec26.gifv"
+            alt="Teenage Mutant Ninja Turtles Gif"
           />
           <button
             className="cta-button connect-wallet-button"
