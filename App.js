@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import SelectCharacter from './Components/SelectCharacter';
+import Arena from './Components/Arena';
 import { CONTRACT_ADDRESS, transformCharacterData } from './constants';
 import myEpicGame from './utils/MyEpicGame.json';
 import { ethers } from 'ethers';
@@ -21,6 +22,8 @@ const App = () => {
  * Right under current account, setup this new state property
  */
   const [characterNFT, setCharacterNFT] = useState(null); 
+
+  const runAttackAction = async () => {};
   
   /*
    * Start by creating a new action that we will run on component load
@@ -92,7 +95,6 @@ const App = () => {
   }, [currentAccount]);
 
 
-
   // Render Methods
   const renderContent = () => {
     /*
@@ -103,7 +105,7 @@ const App = () => {
         <div className="connect-wallet-container">
           <img
             src="https://64.media.tumblr.com/6ce0efd032c11117ccefcccee48c8f31/d2f6d1cd1704cba9-91/s500x750/a4e7fb2d40a021ca31ebb5c054c8e2d9385dec26.gifv"
-            alt="Teenage Mutant Ninja Turtles Gif"
+            alt="Teenage Mutant Ninja Turtles"
           />
           <button
             className="cta-button connect-wallet-button"
@@ -116,11 +118,20 @@ const App = () => {
       /*
       * Scenario #2
       */
-    } else if (currentAccount && !characterNFT) {
-      return <SelectCharacter setCharacterNFT={setCharacterNFT} />;
-    }
-  };
 
+    } else if (currentAccount && !characterNFT) {
+    return <SelectCharacter setCharacterNFT={setCharacterNFT} />;	
+	/*
+	* If there is a connected wallet and characterNFT, it's time to battle!
+	*/
+    } else if (currentAccount && characterNFT) {
+      return <Arena characterNFT={characterNFT} />;
+    }
+
+
+
+    
+  };
     
   /*
    * Implement your connectWallet method here
@@ -157,7 +168,6 @@ const App = () => {
   useEffect(() => {
     checkIfWalletIsConnected();
   }, []);
-
 
   return (
     <div className="App">
