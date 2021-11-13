@@ -18,18 +18,14 @@ const App = () => {
    */
   const [currentAccount, setCurrentAccount] = useState(null);
 
-  /*
- * Right under current account, setup this new state property
- */
+  /* Right under current account, setup this new state property */
   const [characterNFT, setCharacterNFT] = useState(null); 
 
   const runAttackAction = async () => {};
   
-  /*
-   * Start by creating a new action that we will run on component load
-   */
-  // Actions
+  /* Start by creating a new action that we will run on component load */
 
+  // Actions
   const checkIfWalletIsConnected = async () => {
     try {
       const { ethereum } = window;
@@ -62,9 +58,7 @@ const App = () => {
   };
 
   useEffect(() => {
-    /*
-    * The function we will call that interacts with out smart contract
-    */
+    /* The function we will call that interacts with out smart contract */
     const fetchNFTMetadata = async () => {
       console.log('Checking for Character NFT on address:', currentAccount);
 
@@ -85,21 +79,16 @@ const App = () => {
       }
     };
 
-    /*
-    * We only want to run this, if we have a connected wallet
-    */
+    /* We only want to run this, if we have a connected wallet */
     if (currentAccount) {
       console.log('CurrentAccount:', currentAccount);
       fetchNFTMetadata();
     }
-  }, [currentAccount]);
-
+  }, [currentAccount]);   
 
   // Render Methods
   const renderContent = () => {
-    /*
-    * Scenario #1
-    */
+    /* Scenario #1 */
     if (!currentAccount) {
       return (
         <div className="connect-wallet-container">
@@ -115,27 +104,17 @@ const App = () => {
           </button>
         </div>
       );
-      /*
-      * Scenario #2
-      */
-
+    
+    /* Scenario #2 */
     } else if (currentAccount && !characterNFT) {
     return <SelectCharacter setCharacterNFT={setCharacterNFT} />;	
-	/*
-	* If there is a connected wallet and characterNFT, it's time to battle!
-	*/
+	  /* If there is a connected wallet and characterNFT, it's time to battle! */
     } else if (currentAccount && characterNFT) {
       return <Arena characterNFT={characterNFT} />;
     }
-
-
-
-    
   };
     
-  /*
-   * Implement your connectWallet method here
-   */
+  /* Implement your connectWallet method here */
   const connectWalletAction = async () => {
     try {
       const { ethereum } = window;
@@ -193,4 +172,5 @@ const App = () => {
     </div>
   );
 };
+
 export default App;
