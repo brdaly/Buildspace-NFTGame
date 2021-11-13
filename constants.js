@@ -1,4 +1,4 @@
-const CONTRACT_ADDRESS = '0xE49e...........';
+const CONTRACT_ADDRESS = '0xE49eXXXXX';
 
 /*
  * Add this method and make sure to export it on the bottom!
